@@ -1,0 +1,104 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+
+float4 resolution;
+Texture2D<float4> source;
+RWTexture2D<float4> output;
+int _mode = 1;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!       
+
+    
+   // float gray = 0; 
+    float4 temp = 1;
+
+   // if(_mode == 1)
+   // {
+   //     float4 pos = float4((float)id.x, (float)id.y,0,0);
+
+   //     if(pos.x > (float)resolution.x/2.0)
+   //     {
+   //         if(pos.y > (float)resolution.y/2.0)
+   //         {   
+   //             temp = source[id.xy - float2(resolution.x/2,0)];
+   //         }
+   //         else
+   //         {
+   //             temp = source[id.xy + float2(0, resolution.y/2)];
+   //         }
+
+   //     }
+   //     else
+   // {
+   //     if(pos.y > resolution.y/2.0)
+   //     {
+   //         temp = source[id.xy - float2(0, resolution.y/2)];
+   //     }
+        
+   //     else
+   //     {
+   //        temp = source[id.xy + float2(resolution.x/2,0)];
+   //     }
+   // }
+   // }
+   // if(_mode == 0)
+   // {
+   //     int x= (int)ceil((float)id.x*2.0)%resolution.x;
+   //     int y= (int)ceil((float)id.y*2.0)%resolution.y;
+   //     uint3 id_2 = uint3(x,y,0);
+   //     temp = source[id_2.xy];
+   // }
+
+   
+ int x= (int)ceil((float)id.x*2.0)%resolution.x;
+        int y= (int)ceil((float)id.y*2.0)%resolution.y;
+        uint3 id_2 = uint3(x,y,0);
+        temp = source[id_2.xy];
+   float4 temp2 = (temp.r + temp.g + temp.b)/3;
+   temp2.x += 0.125;
+  
+ 
+
+    output[id.xy] = 
+    
+    float4
+    (
+        (temp2.x * ((float)(id.x>resolution.x/2) ? 0.75 : 0.25)),
+        temp2.x * ((float)(id.y>resolution.y/2)? 0.75 : 0.25),
+        temp2.x * ((float)((id.y<resolution.y/2 && id.x < resolution.x/2)? 0.75 : 0.25)),
+        1
+    );
+
+   
+
+  
+  // float dist = min(length(id.x - resolution.x/2), length(id.y - resolution.y/2));
+  //  dist = step(dist,2);
+  // output[id.xy] = dist == 1 ? 0 : output[id.xy];
+
+
+  //  //Multiply the current Pixel ID by two both in the X and Y Direction
+   
+  //  int newx= (id.x*2.0)%resolution.x;
+  //  int newy= (id.y*2.0)%resolution.y;
+
+   
+  //  uint3 newID = uint3(newx,newy,0);
+  //  float4 halfSize = source[newID.xy];
+  //  output[id.xy] = halfSize;
+
+  //float grey = (source[id.xy].r + source[id.xy].g + source[id.xy].b)/3.0; 
+  // output[id.xy] = float4(grey,grey,grey,1);
+
+
+    
+
+  
+     
+}
